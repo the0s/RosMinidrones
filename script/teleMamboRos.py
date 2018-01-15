@@ -62,6 +62,11 @@ def getKey():
 	return key
 
 
+def controls():
+	s = "Control Using:\n Throttle: w s \n yaw: a d \n pitch: i k \n roll: j l\n \
+	Change aggresiveness: - + \n Select drone: 0 \n Special moves: 2-5, Land:6, Takeoff: 1"
+	print s
+
 '''
 Main Function
 '''
@@ -86,10 +91,10 @@ if __name__ == '__main__':
 		rate = rospy.Rate(10)
 		speed=50
 		swarm=-1
-
+		controls()
 		while not rospy.is_shutdown():
 			key = getKey()
-			print('hello',key)
+			print('Key: '+key)
 			if key == '\x03':
 				sys.exit()
 			elif key =='1':
