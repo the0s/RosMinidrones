@@ -27,6 +27,10 @@ def pubAll(pubs, cmd):
 	for k in pubs:
 		k.publish(cmd)
 
+def pubdiff(pubs, cmd):
+	for k,j in zip(pubs,cmd):
+		k.publish(j)		
+
 def rosCallback(data):
 	for n,ids in enumerate(mambos):
 		if ids == data.header.frame_id[6:]:
@@ -48,6 +52,14 @@ def hook():
 def is_exit():
 	if rospy.is_shutdown():
 		sys.exit()	
+
+def checkHover(wait):
+	wait.sleep()
+	print("waiting all to hover...")
+	while(not checkAll('hovering') and not rospy.is_shutdown()):
+		wait.sleep()
+	is_exit()
+
 '''
 Main Function
 '''
@@ -81,39 +93,38 @@ if __name__ == '__main__':
 				# print("/"+ mamboName + "/input")
 				# p1.publish('takeoff')
 				# p2.publish('takeoff')
+				print("waiting landed state...")
 				while(not checkAll('landed') and not rospy.is_shutdown()):
 					wait.sleep()
 				is_exit()
 				print('Takeoff')						
 				pubAll(pubs,'takeoff')
 
-				wait.sleep()
-				while(not checkAll('hovering') and not rospy.is_shutdown()):
-					wait.sleep()				
-				is_exit()
+				checkHover(wait)
 				print('flip')
 				pubAll(pubs,'flipleft')
 
-				wait.sleep()
-				while(not checkAll('hovering') and not rospy.is_shutdown()):
-					wait.sleep()
-				is_exit()
+				checkHover(wait)
 				print('flip')
 				pubAll(pubs,'flipright')
 				wait.sleep()
 
-				wait.sleep()
-				while(not checkAll('hovering') and not rospy.is_shutdown()):
-					wait.sleep()
-				is_exit()
+				checkHover(wait)
 				print('flip')
 				pubAll(pubs,'flipfront')
 				wait.sleep()	
 
-				wait.sleep()
-				while(not checkAll('hovering') and not rospy.is_shutdown()):
-					wait.sleep()								
-				is_exit()
+				checkHover(wait)
+				print('indivudual moves')
+				pubdiff(pubs,['flipfront', 'flipright','flipleft'])
+				wait.sleep()	
+
+				checkHover(wait)
+				print('indivudual moves')
+				pubdiff(pubs,['flipback', 'flipleft','flipright'])
+				wait.sleep()					
+
+				checkHover(wait)
 				print('Land')	
 				pubAll(pubs,'land')
 

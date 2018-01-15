@@ -11,6 +11,11 @@ from kios.msg import MamboState, DroneInput
 import re
 import sys, select, termios, tty
 
+# SET the bluetooth ids of the drones to control!
+mambos = ["e014cd613dd1", "e014a8473dbe", "e01486a13dc0"]
+
+mamboStates=[None,None,None]
+
 def fastInput(inTup):
 	temp = DroneInput()
 	temp.roll=inTup[0]
@@ -19,11 +24,6 @@ def fastInput(inTup):
 	temp.vertical=inTup[3]
 	temp.duration=inTup[4]
 	return temp
-
-#fl = open("/home/the0s/catkin_ws/src/kios/test.txt",'w')
-
-mamboStates=[None,None,None]
-mambos = ["e014cd613dd1", "e014a8473dbe", "e01486a13dc0"]
 
 def pubAll(pubs, cmd,swarm=-1):
 	if swarm == -1:
@@ -63,9 +63,8 @@ def getKey():
 
 
 def controls():
-	s = "Control Using:\n Throttle: w s \n yaw: a d \n pitch: i k \n roll: j l\n \
-	Change aggresiveness: - + \n Select drone: 0 \n Special moves: 2-5, Land:6, Takeoff: 1"
-	print s
+	print("Control Using:\n Throttle: w s \n yaw: a d \n pitch: i k \n roll: j l\n Change aggresiveness: - + \n Select drone: 0 \n Special moves: 2-5, Land:6, Takeoff: 1")
+ 
 
 '''
 Main Function
@@ -75,10 +74,6 @@ if __name__ == '__main__':
 		settings = termios.tcgetattr(sys.stdin)
 		rospy.init_node('drone_test', anonymous=True)
 		rospy.on_shutdown(hook)
-		mamboAddr = rospy.get_param('~droneId', "e0:14:cd:61:3d:d1")
-		mamboAddrSub = re.sub(':', '', mamboAddr)
-		mamboName = "drone_" + mamboAddrSub		
-		publisher=rospy.Publisher("/"+ mamboName + "/input", DroneInput, queue_size=10)
 		
 		pubs = []
 		pubInput =[]		
@@ -88,7 +83,8 @@ if __name__ == '__main__':
 			pubInput.append(rospy.Publisher("/drone_"+ k + "/input", DroneInput, queue_size=10))
 			subs.append(rospy.Subscriber("/drone_"+ k + "/pub", MamboState, rosCallback))
 		
-		rate = rospy.Rate(10)
+		duration = 0.1
+		rate = rospy.Rate(1/duration)
 		speed=50
 		swarm=-1
 		controls()
@@ -122,28 +118,28 @@ if __name__ == '__main__':
 				speed-=1
 				print('Speed: %i'%speed)
 			elif key =='w':
-				temp=fastInput((0,0,0,speed,0.1))
+				temp=fastInput((0,0,0,speed,duration))
 				pubAll(pubInput,temp,swarm)
 			elif key =='s':
-				temp=fastInput((0,0,0,-speed,0.1))
+				temp=fastInput((0,0,0,-speed,duration))
 				pubAll(pubInput,temp,swarm)			
 			elif key =='a':
-				temp=fastInput((-speed,0,0,0,0.1))
+				temp=fastInput((-speed,0,0,0,duration))
 				pubAll(pubInput,temp,swarm)
 			elif key =='d':
-				temp=fastInput((speed,0,0,0,0.1))
+				temp=fastInput((speed,0,0,0,duration))
 				pubAll(pubInput,temp,swarm)
 			elif key =='i':
-				temp=fastInput((0,speed,0,0,0.1))
+				temp=fastInput((0,speed,0,0,duration))
 				pubAll(pubInput,temp,swarm)
 			elif key =='k':
-				temp=fastInput((0,-speed,0,0,0.1))
+				temp=fastInput((0,-speed,0,0,duration))
 				pubAll(pubInput,temp,swarm)
 			elif key =='j':
-				temp=fastInput((0,0,speed,0,0.1))
+				temp=fastInput((0,0,speed,0,duration))
 				pubAll(pubInput,temp,swarm)
 			elif key =='l':
-				temp=fastInput((0,0,-speed,0,0.1))
+				temp=fastInput((0,0,-speed,0,duration))
 				pubAll(pubInput,temp,swarm)
 			elif key =='0':
 				value=raw_input('Select Drone (-1 for all):')
