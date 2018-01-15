@@ -1,0 +1,15 @@
+<launch>
+    <node name="MamboRos" pkg="kios" type="mamboROS.py" respawn="true">
+         <param name="~droneId" type="string" value="e0:14:cd:61:3d:d1" />
+    </node>
+
+    <node name="MamboRos2" pkg="kios" type="mamboROS.py" respawn="true">
+         <param name="~droneId" type="string" value="e0:14:a8:47:3d:be" />
+         <param name="~delay" type="double" value="4.0" />
+    </node>
+
+   <node name="MamboRos3" pkg="kios" type="mamboROS.py" respawn="true">
+         <param name="~droneId" type="string" value="e0:14:86:a1:3d:c0" />
+         <param name="~delay" type="double" value="10.0" />
+    </node>         
+</launch>
