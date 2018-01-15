@@ -10,6 +10,9 @@ from termcolor import colored
 from kios.msg import MamboState, DroneInput
 import re
 
+# SET the bluetooth ids of the drones to control!
+mambos = ["e014cd613dd1", "e014a8473dbe", "e01486a13dc0"]
+
 def fastInput(inTup):
 	temp = DroneInput()
 	temp.roll=inTup(0)
@@ -21,7 +24,7 @@ def fastInput(inTup):
 #fl = open("/home/the0s/catkin_ws/src/kios/test.txt",'w')
 
 mamboStates=[None,None,None]
-mambos = ["e014cd613dd1", "e014a8473dbe", "e01486a13dc0"]
+
 
 def pubAll(pubs, cmd):
 	for k in pubs:
