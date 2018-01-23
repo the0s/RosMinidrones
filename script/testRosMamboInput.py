@@ -11,7 +11,7 @@ from kios.msg import MamboState, DroneInput
 import re
 
 # SET the bluetooth ids of the drones to control!
-mambos = ["e014cd613dd1", "e014a8473dbe", "e01486a13dc0"]
+mambos = ["e01412ab3dbd", "e014a8473dbe", "e01486a13dc0"]
 
 def fastInput(inTup):
 	temp = DroneInput()
@@ -50,6 +50,7 @@ def checkAll(state):
 
 def hook():
 	print("Shutting down")
+	pubAll(pubs,'land')
 	rospy.signal_shutdown("Shutdown hook")
 
 def is_exit():

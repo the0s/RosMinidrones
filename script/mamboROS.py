@@ -34,6 +34,7 @@ class DroneNode(object):
 			# get drone unique name
 			mamboAddrSub = re.sub(':', '', mamboAddr)
 			self.mamboName = "drone_" + mamboAddrSub
+			self.position=initalPos
 			# setting up drone's bluetooth and connect
 			print colored("* Setting Mambo: %s ..." %mamboAddr,'magenta')	
 			self.mambo = Mambo(mamboAddr, use_wifi=False)

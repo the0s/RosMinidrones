@@ -12,7 +12,8 @@ import re
 import sys, select, termios, tty
 
 # SET the bluetooth ids of the drones to control!
-mambos = ["e014cd613dd1", "e014a8473dbe", "e01486a13dc0"]
+#e0:14:cd:61:3d:d1
+mambos = ["e01412ab3dbd", "e014a8473dbe", "e01486a13dc0"]
 
 mamboStates=[None,None,None]
 
